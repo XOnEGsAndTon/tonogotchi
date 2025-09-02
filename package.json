@@ -1,0 +1,22 @@
+{
+  "name": "tonogotchi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "TONоготчи monorepo (MVP)",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18.18 <=22"
+  },
+  "scripts": {
+    "build": "npm run -ws build",
+    "dev": "npm run -ws dev",
+    "lint": "npm run -ws lint || true",
+    "typecheck": "npm run -ws typecheck",
+    "format": "npm run -ws format",
+    "start": "npm --workspace apps/api run start"
+  }
+}
