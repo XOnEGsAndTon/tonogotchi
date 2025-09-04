@@ -61,6 +61,33 @@ CREATE TABLE IF NOT EXISTS clan_members (
   joined_at TIMESTAMP NOT NULL DEFAULT NOW(),
   CONSTRAINT clan_members_pk PRIMARY KEY (clan_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS farm_events (
+  id SERIAL PRIMARY KEY,
+  pet_id INTEGER NOT NULL,
+  type VARCHAR(16) NOT NULL,
+  points INTEGER NOT NULL,
+  at TIMESTAMP NOT NULL DEFAULT NOW(),
+  meta JSONB NULL
+);
+CREATE INDEX IF NOT EXISTS farm_pet_idx ON farm_events(pet_id);
+CREATE INDEX IF NOT EXISTS farm_at_idx ON farm_events(at);
+
+CREATE TABLE IF NOT EXISTS game_sessions (
+  id SERIAL PRIMARY KEY,
+  user_id VARCHAR(64) NOT NULL,
+  pet_id INTEGER NULL,
+  kind VARCHAR(16) NOT NULL,
+  pattern JSONB NOT NULL,
+  started_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMP NOT NULL,
+  submitted_at TIMESTAMP NULL,
+  score INTEGER NOT NULL DEFAULT 0,
+  state VARCHAR(16) NOT NULL,
+  meta JSONB NULL
+);
+CREATE INDEX IF NOT EXISTS game_user_idx ON game_sessions(user_id);
+CREATE INDEX IF NOT EXISTS game_kind_idx ON game_sessions(kind);
 `;
 
 async function main() {
@@ -77,4 +104,3 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-

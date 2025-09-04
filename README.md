@@ -13,12 +13,15 @@ Copy .env.example to .env and fill values:
 - TON_RPC_URL, TON_MNEMONIC, COLLECTION_ADDR
 - GRAVE_CID, RENDER_WEBHOOK_SECRET
 - POSTGRES_URL, REDIS_URL
+- RENDER_QUEUE (default render_jobs), RENDERER_URL, CALLBACK_URL
 
 Scripts
 - npm run build — build all workspaces
 - npm run dev — dev for all workspaces (run separately per app for now)
 - npm --workspace apps/api run dev — start API at :3000
 - npm --workspace apps/worker run dev — start worker loop
+- npm --workspace apps/renderer-svc run dev — start renderer HTTP
+- npm --workspace apps/render-worker run dev — start renderer worker
 - npm --workspace @tonogotchi/db run migrate:sql — apply initial schema
 
 API (draft)
@@ -41,3 +44,17 @@ Notes
 - Marketplace deeplink is returned to be opened client-side.
 - TonConnect flows, on-chain calls, and full renderer pipeline are stubbed for MVP.
 
+Railway Deploy
+- Install Railway CLI and login: `npm i -g @railway/cli && railway login`
+- Create a project: `railway init`
+- Deploy services using Dockerfiles:
+  - API: from repo root run `railway up --service api --path ./` and set the service to build `apps/api/Dockerfile` (or deploy from folder `apps/api` with its Dockerfile path).
+  - Worker: `railway up --service worker` (Dockerfile at `apps/worker/Dockerfile`).
+  - Renderer HTTP: `railway up --service renderer-svc` (Dockerfile at `apps/renderer-svc/Dockerfile`).
+  - Render worker: `railway up --service render-worker` (Dockerfile at `apps/render-worker/Dockerfile`).
+- Configure variables per service in Railway Dashboard:
+  - Common: `POSTGRES_URL`, `REDIS_URL`, `RENDER_WEBHOOK_SECRET`.
+  - API: `RENDERER_URL` (public URL of renderer-svc), `CALLBACK_URL` (public URL of API), TON vars.
+  - Worker: TON vars.
+  - Renderer-svc: `REDIS_URL`, `RENDER_WEBHOOK_SECRET`, `RENDER_QUEUE`.
+  - Render-worker: `REDIS_URL`, `RENDER_QUEUE`.

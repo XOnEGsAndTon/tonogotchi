@@ -1,7 +1,8 @@
 import { makeDb } from '@tonogotchi/db';
 import { tables } from '@tonogotchi/db';
 import { NEGLECT_DAYS_TO_DEATH } from '@tonogotchi/shared';
-import { and, desc, eq, gt, isNull, sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
+import { declareDeath } from '@tonogotchi/ton';
 
 async function neglectCheck(db: any) {
   const { pets, careEvents } = tables;
@@ -20,8 +21,13 @@ async function neglectCheck(db: any) {
     if (!lastCare || lastCare < threshold) {
       // Mark as dead due to neglect
       await db.update(pets).set({ isDead: true, deathTime: now }).where(eq(pets.id, r.id));
-      // TODO: call declareDeath() via TON to update on-chain content_uri
-      // eslint-disable-next-line no-console
+      try {
+        if (process.env.TON_RPC_URL && process.env.TON_MNEMONIC) {
+          await declareDeath({ rpc: process.env.TON_RPC_URL, mnemonic: process.env.TON_MNEMONIC, nftAddr: r.nft_addr, deathTime: Math.floor(now.getTime() / 1000) });
+        }
+      } catch (e) {
+        console.error('declareDeath failed', e);
+      }
       console.log(`Declared death (neglect) for pet ${r.nft_addr}`);
     }
   }
@@ -36,8 +42,13 @@ async function lifespanCheck(db: any) {
     const end = new Date(new Date(p.birthTime).getTime() + p.lifespanDays * 24 * 60 * 60 * 1000);
     if (now >= end) {
       await db.update(pets).set({ isDead: true, deathTime: now }).where(eq(pets.id, p.id));
-      // TODO: call declareDeath() via TON
-      // eslint-disable-next-line no-console
+      try {
+        if (process.env.TON_RPC_URL && process.env.TON_MNEMONIC) {
+          await declareDeath({ rpc: process.env.TON_RPC_URL, mnemonic: process.env.TON_MNEMONIC, nftAddr: p.nftAddr, deathTime: Math.floor(now.getTime() / 1000) });
+        }
+      } catch (e) {
+        console.error('declareDeath failed', e);
+      }
       console.log(`Declared natural death for pet ${p.nftAddr}`);
     }
   }
@@ -67,4 +78,3 @@ main().catch((e) => {
   console.error(e);
   process.exit(1);
 });
-

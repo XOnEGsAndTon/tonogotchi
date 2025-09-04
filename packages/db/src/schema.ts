@@ -63,3 +63,31 @@ export const clanMembers = pgTable('clan_members', {
   pk: primaryKey({ columns: [t.clanId, t.userId], name: 'clan_members_pk' }),
 }));
 
+export const farmEvents = pgTable('farm_events', {
+  id: serial('id').primaryKey(),
+  petId: integer('pet_id').notNull(),
+  type: varchar('type', { length: 16 }).notNull(), // active | passive | care
+  points: integer('points').notNull(),
+  at: timestamp('at', { withTimezone: false }).defaultNow().notNull(),
+  meta: jsonb('meta'),
+}, (t) => ({
+  petIdx: index('farm_pet_idx').on(t.petId),
+  atIdx: index('farm_at_idx').on(t.at),
+}));
+
+export const gameSessions = pgTable('game_sessions', {
+  id: serial('id').primaryKey(),
+  userId: varchar('user_id', { length: 64 }).notNull(),
+  petId: integer('pet_id'),
+  kind: varchar('kind', { length: 16 }).notNull(), // rhythm | forage | coop
+  pattern: jsonb('pattern').notNull(),
+  startedAt: timestamp('started_at', { withTimezone: false }).defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: false }).notNull(),
+  submittedAt: timestamp('submitted_at', { withTimezone: false }),
+  score: integer('score').default(0).notNull(),
+  state: varchar('state', { length: 16 }).notNull(), // active | submitted | expired
+  meta: jsonb('meta'),
+}, (t) => ({
+  userIdx: index('game_user_idx').on(t.userId),
+  kindIdx: index('game_kind_idx').on(t.kind),
+}));

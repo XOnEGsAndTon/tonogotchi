@@ -1,5 +1,5 @@
 {
-  "name": "@tonogotchi/worker",
+  "name": "@tonogotchi/render-worker",
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
@@ -11,14 +11,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tonogotchi/shared": "file:../../packages/shared",
-    "@tonogotchi/db": "file:../../packages/db",
-    "@tonogotchi/ton": "file:../../packages/ton",
-    "drizzle-orm": "^0.33.0",
-    "pg": "^8.11.3"
+    "ioredis": "^5.3.2",
+    "@tonogotchi/renderer": "file:../../packages/renderer"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.0"
   }
 }
+

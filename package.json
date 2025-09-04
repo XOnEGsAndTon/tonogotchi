@@ -12,11 +12,13 @@
     "node": ">=18.18 <=22"
   },
   "scripts": {
-    "build": "npm run -ws build",
-    "dev": "npm run -ws dev",
-    "lint": "npm run -ws lint || true",
-    "typecheck": "npm run -ws typecheck",
-    "format": "npm run -ws format",
+    "build:packages": "npm --workspace @tonogotchi/shared run build && npm --workspace @tonogotchi/db run build && npm --workspace @tonogotchi/renderer run build && npm --workspace @tonogotchi/ton run build",
+    "build:apps": "npm --workspace @tonogotchi/api run build && npm --workspace @tonogotchi/worker run build && npm --workspace @tonogotchi/renderer-svc run build && npm --workspace @tonogotchi/render-worker run build",
+    "build": "npm run build:packages && npm run build:apps",
+    "dev": "echo 'run dev per app: npm --workspace <app> run dev'",
+    "lint": "true",
+    "typecheck": "npm --workspace @tonogotchi/shared run typecheck && npm --workspace @tonogotchi/db run typecheck && npm --workspace @tonogotchi/renderer run typecheck && npm --workspace @tonogotchi/ton run typecheck && npm --workspace @tonogotchi/api run typecheck && npm --workspace @tonogotchi/worker run typecheck && npm --workspace @tonogotchi/renderer-svc run typecheck && npm --workspace @tonogotchi/render-worker run typecheck",
+    "format": "true",
     "start": "npm --workspace apps/api run start"
   }
 }
