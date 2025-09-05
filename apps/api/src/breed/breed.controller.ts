@@ -44,21 +44,7 @@ export class BreedController {
     const digest = hashSeed(body.seed);
     if (digest !== s.commitHash) throw new HttpException('commit_mismatch', HttpStatus.FORBIDDEN);
     await this.dbs.db.update(this.dbs.tables.breedingSessions).set({ revealSeed: body.seed, state: 'revealed' }).where(eq(this.dbs.tables.breedingSessions.id, body.sessionId));
-    // Enqueue render job via renderer-svc on Railway (optional)
-    const url = process.env.RENDERER_URL; // e.g., https://renderer.production.up.railway.app
-    const secret = process.env.RENDER_WEBHOOK_SECRET;
-    const callback = process.env.CALLBACK_URL ? `${process.env.CALLBACK_URL.replace(/\/$/,'')}/api/hooks/render` : undefined;
-    if (url && secret) {
-      try {
-        await fetch(`${url.replace(/\/$/,'')}/render/start`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json', authorization: `Bearer ${secret}` },
-          body: JSON.stringify({ kind: 'breed', dnaSeed: body.seed, callbackUrl: callback }),
-        });
-      } catch (e) {
-        console.error('renderer enqueue failed', e);
-      }
-    }
+    // Renderer is removed in MVP; no external render job is enqueued.
     return { ok: true };
   }
 }
