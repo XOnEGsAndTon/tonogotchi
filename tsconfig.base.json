@@ -4,11 +4,6 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "baseUrl": ".",
-    "paths": {
-      "@tonogotchi/*": [
-        "packages/*/dist"
-      ]
-    },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
