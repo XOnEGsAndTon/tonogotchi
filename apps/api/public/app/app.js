@@ -19,14 +19,12 @@
 		return `<div class="flex gap-2 items-center"><input id="addr" class="flex-1 bg-[#17212b] border border-[#111921] rounded-lg px-3 py-2" placeholder="NFT address"/><button id="load" class="px-3 py-2 rounded-lg bg-card hover:bg-card/80">Загрузить</button></div>`;
 	}
 
-	function renderPet(){
+	async function renderPet(){
 		content.innerHTML = `
 			${addrField()}
 			<div id="petBox" class="mt-3 text-sm text-muted">—</div>
 		`;
-		$('#load').onclick = async () => {
-			const a = $('#addr').value.trim(); if(!a) return;
-			const r = await window.api.getPet(a).catch(e=>({error:e.message}));
+		const loadAndRender = (r) => {
 			if(r.error){ $('#petBox').textContent = 'Ошибка: '+r.error; return; }
 			const s = r.status;
 			$('#petBox').innerHTML = `
@@ -50,6 +48,15 @@
 				</div>
 			`;
 		};
+		if(tgUserId){
+			const r = await window.api.getTestPet(tgUserId).catch(e=>({error:e.message}));
+			loadAndRender(r);
+		}
+		$('#load').onclick = async () => {
+			const a = $('#addr').value.trim(); if(!a) return;
+			const r = await window.api.getPet(a).catch(e=>({error:e.message}));
+			loadAndRender(r);
+		};
 	}
 
 	function renderCare(){
@@ -67,9 +74,12 @@
 			<div id="careRes" class="mt-2 text-sm text-muted">—</div>
 		`;
 		$('#care').onclick = async () => {
-			const a = $('#addr').value.trim(); if(!a) return;
 			const type = $('#careType').value;
-			const r = await window.api.care(a, type).catch(e=>({error:e.message}));
+			let r;
+			const a = $('#addr').value.trim();
+			if(a) r = await window.api.care(a, type).catch(e=>({error:e.message}));
+			else if (tgUserId) r = await window.api.testCare(tgUserId, type).catch(e=>({error:e.message}));
+			else r = { error: 'no_target' };
 			$('#careRes').textContent = r.ok? 'OK' : ('Ошибка: '+(r.error||'fail'));
 		};
 	}

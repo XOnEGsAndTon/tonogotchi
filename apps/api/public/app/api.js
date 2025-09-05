@@ -8,6 +8,8 @@
 	window.api = {
 		getPet: (addr) => request(`/pet/${encodeURIComponent(addr)}`),
 		care: (addr, type) => request(`/pet/${encodeURIComponent(addr)}/care`, 'POST', { type }),
+		getTestPet: (tgId) => request(`/pet/test?tgId=${encodeURIComponent(tgId)}`),
+		testCare: (tgId, type) => request(`/pet/test/care?tgId=${encodeURIComponent(tgId)}`, 'POST', { type }),
 		rhythmStart: (tgId, petAddr) => request('/games/rhythm/start','POST',{ tgId, petAddr }),
 		rhythmSubmit: (sessionId, hits) => request('/games/rhythm/submit','POST',{ sessionId, hits }),
 	};
