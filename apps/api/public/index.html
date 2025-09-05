@@ -6,47 +6,63 @@
   <title>TONоготчи</title>
   <meta name="theme-color" content="#0f1720"/>
   <link rel="icon" href="/favicon.ico"/>
+  <link rel="preload" as="image" href="/assets/logo.svg"/>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{bg:'#0f1720',card:'#1b2633',muted:'#708499',acc:'#6ab3f3'}}}}</script>
+  <script>tailwind.config={theme:{extend:{colors:{bg:'#0f1720',card:'#1b2633',muted:'#87a1b4',acc:'#6ab3f3',ok:'#38d39f',warn:'#f6c177',bad:'#ff6b6b'}}}}</script>
+  <link rel="stylesheet" href="/styles.css"/>
 </head>
 <body class="bg-bg text-white min-h-screen">
-  <div class="max-w-screen-md mx-auto p-4">
-    <header class="flex items-center justify-between gap-3">
-      <h1 class="text-xl font-semibold">TONоготчи</h1>
+  <div class="mx-auto max-w-screen-md min-h-screen flex flex-col">
+    <header class="px-4 pt-4 pb-2 flex items-center justify-between gap-3 sticky top-0 bg-bg/80 backdrop-blur z-10">
+      <div class="flex items-center gap-3">
+        <img src="/assets/logo.svg" alt="TONоготчи" class="w-7 h-7"/>
+        <h1 class="text-lg font-semibold">TONоготчи</h1>
+      </div>
       <div id="tonconnect" class="flex items-center gap-2"></div>
     </header>
 
-    <nav class="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
-      <button data-view="pet" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🐾 Питомец</span>
-      </button>
-      <button data-view="care" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🧴 Уход</span>
-      </button>
-      <button data-view="breed" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🧬 Скрещивание</span>
-      </button>
-      <button data-view="games" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🎮 Игры</span>
-      </button>
-      <button data-view="clans" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🏳️ Кланы</span>
-      </button>
-      <button data-view="market" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">
-        <span>🏪 Маркет</span>
-      </button>
+    <main class="flex-1 px-4">
+      <section class="mt-2 rounded-xl bg-card/40 p-4" id="content"></section>
+    </main>
+
+    <nav class="sticky bottom-0 bg-[#0c131a]/90 backdrop-blur border-t border-[#0b1016]">
+      <div class="max-w-screen-md mx-auto grid grid-cols-6">
+        <button data-view="pet" class="tab nav-btn">
+          <img src="/assets/pet.svg" alt="Питомец"/>
+          <span>Питомец</span>
+        </button>
+        <button data-view="care" class="tab nav-btn">
+          <img src="/assets/care.svg" alt="Уход"/>
+          <span>Уход</span>
+        </button>
+        <button data-view="breed" class="tab nav-btn">
+          <img src="/assets/breed.svg" alt="Скрещ."/>
+          <span>Скрещ.</span>
+        </button>
+        <button data-view="games" class="tab nav-btn">
+          <img src="/assets/games.svg" alt="Игры"/>
+          <span>Игры</span>
+        </button>
+        <button data-view="clans" class="tab nav-btn">
+          <img src="/assets/clans.svg" alt="Кланы"/>
+          <span>Кланы</span>
+        </button>
+        <button data-view="market" class="tab nav-btn">
+          <img src="/assets/market.svg" alt="Маркет"/>
+          <span>Маркет</span>
+        </button>
+      </div>
     </nav>
 
-    <section class="mt-4 rounded-xl bg-card/40 p-4" id="content"></section>
-
-    <footer class="mt-6 text-sm text-muted">
+    <footer class="px-4 py-3 text-sm text-muted">
       API: <a class="text-acc" href="/api">/api</a>
     </footer>
   </div>
 
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-  <script src="./app/api.js"></script>
-  <script src="./app/app.js"></script>
+  <script>window.__TC_MANIFEST__ = '/tonconnect-manifest.json';</script>
+  <script src="/app/api.js"></script>
+  <script src="/app/app.js"></script>
 </body>
 </html>
