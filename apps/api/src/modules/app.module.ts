@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { SpaController } from '../spa.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PetController } from '../pet/pet.controller';
@@ -17,7 +18,7 @@ import { HooksController } from '../hooks/hooks.controller';
       exclude: ['/api*'],
     }),
   ],
-  controllers: [PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
+  controllers: [SpaController, PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
   providers: [DbService],
 })
 export class AppModule {}
