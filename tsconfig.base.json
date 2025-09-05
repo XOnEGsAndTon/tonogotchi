@@ -6,8 +6,7 @@
     "baseUrl": ".",
     "paths": {
       "@tonogotchi/*": [
-        "packages/*/dist",
-        "packages/*/src"
+        "packages/*/dist"
       ]
     },
     "resolveJsonModule": true,
