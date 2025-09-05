@@ -5,13 +5,11 @@ WORKDIR /app
 COPY package.json tsconfig.base.json ./
 COPY packages/shared/package.json packages/shared/
 COPY packages/db/package.json packages/db/
-COPY packages/renderer/package.json packages/renderer/
 COPY packages/ton/package.json packages/ton/
 COPY apps/api/package.json apps/api/
 
 RUN npm install --prefix packages/shared && npm run build --prefix packages/shared
 RUN npm install --prefix packages/db && npm run build --prefix packages/db
-RUN npm install --prefix packages/renderer && npm run build --prefix packages/renderer
 RUN npm install --prefix packages/ton && npm run build --prefix packages/ton
 
 COPY . .
