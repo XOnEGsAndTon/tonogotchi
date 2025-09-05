@@ -14,7 +14,7 @@
     "express": "^4.19.2",
     "body-parser": "^1.20.3",
     "ioredis": "^5.3.2",
-    "@tonogotchi/shared": "file:../../packages/shared"
+    "@tonogotchi/shared": "0.1.0"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0",

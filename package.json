@@ -17,7 +17,7 @@
     "build": "npm run build:packages && npm run build:apps",
     "dev": "echo 'run dev per app: npm --workspace <app> run dev'",
     "lint": "true",
-    "typecheck": "npm --workspace @tonogotchi/shared run typecheck && npm --workspace @tonogotchi/db run typecheck && npm --workspace @tonogotchi/renderer run typecheck && npm --workspace @tonogotchi/ton run typecheck && npm --workspace @tonogotchi/api run typecheck && npm --workspace @tonogotchi/worker run typecheck && npm --workspace @tonogotchi/renderer-svc run typecheck && npm --workspace @tonogotchi/render-worker run typecheck",
+    "typecheck": "npm --workspace @tonogotchi/shared run typecheck && npm --workspace @tonogotchi/db run typecheck && npm --workspace @tonogotchi/ton run typecheck && npm --workspace @tonogotchi/api run typecheck && npm --workspace @tonogotchi/worker run typecheck",
     "format": "true",
     "start": "npm --workspace apps/api run start"
   }

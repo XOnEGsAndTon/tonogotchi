@@ -11,9 +11,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@tonogotchi/shared": "file:../../packages/shared",
-    "@tonogotchi/db": "file:../../packages/db",
-    "@tonogotchi/ton": "file:../../packages/ton",
+    "@tonogotchi/shared": "0.1.0",
+    "@tonogotchi/db": "0.1.0",
+    "@tonogotchi/ton": "0.1.0",
     "drizzle-orm": "^0.33.0",
     "pg": "^8.11.3"
   },
