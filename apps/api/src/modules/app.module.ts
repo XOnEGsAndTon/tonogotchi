@@ -11,11 +11,18 @@ import { HooksController } from '../hooks/hooks.controller';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'apps', 'api', 'public'),
-      serveRoot: '/',
-      exclude: ['/api*'],
-    }),
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, '..', 'public'),
+        serveRoot: '/',
+        exclude: ['/api*'],
+      },
+      {
+        rootPath: join(process.cwd(), 'apps', 'api', 'public'),
+        serveRoot: '/',
+        exclude: ['/api*'],
+      },
+    ),
   ],
   controllers: [PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
   providers: [DbService],
