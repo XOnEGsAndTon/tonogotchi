@@ -12,7 +12,7 @@ import { HooksController } from '../hooks/hooks.controller';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'apps', 'api', 'dist', 'public'),
+      rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/',
       exclude: ['/api*'],
     }),
