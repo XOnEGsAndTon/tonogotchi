@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { SpaController } from '../spa.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PetController } from '../pet/pet.controller';
@@ -15,10 +14,10 @@ import { HooksController } from '../hooks/hooks.controller';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/',
-      exclude: ['/api*'],
+      exclude: ['/api*', '/app*'],
     }),
   ],
-  controllers: [SpaController, PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
+  controllers: [PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
   providers: [DbService],
 })
 export class AppModule {}
