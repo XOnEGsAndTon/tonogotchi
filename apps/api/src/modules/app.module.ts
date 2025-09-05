@@ -14,7 +14,7 @@ import { HooksController } from '../hooks/hooks.controller';
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'apps', 'api', 'public'),
       serveRoot: '/',
-      exclude: ['/api*', '/app*'],
+      exclude: ['/api*'],
     }),
   ],
   controllers: [PetController, BreedController, MarketController, ClanController, GamesController, HooksController],
