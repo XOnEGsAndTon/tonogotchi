@@ -12,8 +12,8 @@
     "node": ">=18.18 <=22"
   },
   "scripts": {
-    "build:packages": "npm --workspace @tonogotchi/shared run build && npm --workspace @tonogotchi/db run build && npm --workspace @tonogotchi/renderer run build && npm --workspace @tonogotchi/ton run build",
-    "build:apps": "npm --workspace @tonogotchi/api run build && npm --workspace @tonogotchi/worker run build && npm --workspace @tonogotchi/renderer-svc run build && npm --workspace @tonogotchi/render-worker run build",
+    "build:packages": "npm --workspace @tonogotchi/shared run build && npm --workspace @tonogotchi/db run build && npm --workspace @tonogotchi/ton run build",
+    "build:apps": "npm --workspace @tonogotchi/api run build && npm --workspace @tonogotchi/worker run build",
     "build": "npm run build:packages && npm run build:apps",
     "dev": "echo 'run dev per app: npm --workspace <app> run dev'",
     "lint": "true",

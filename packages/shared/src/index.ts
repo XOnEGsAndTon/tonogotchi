@@ -43,9 +43,7 @@ export interface EnvConfig {
   TON_MNEMONIC: string;
   COLLECTION_ADDR: string;
   GRAVE_CID: string;
-  RENDER_WEBHOOK_SECRET: string;
   POSTGRES_URL: string;
-  REDIS_URL?: string;
 }
 
 export function requireEnv(): EnvConfig {
@@ -54,9 +52,7 @@ export function requireEnv(): EnvConfig {
     TON_MNEMONIC: process.env.TON_MNEMONIC || '',
     COLLECTION_ADDR: process.env.COLLECTION_ADDR || '',
     GRAVE_CID: process.env.GRAVE_CID || '',
-    RENDER_WEBHOOK_SECRET: process.env.RENDER_WEBHOOK_SECRET || '',
     POSTGRES_URL: process.env.POSTGRES_URL || '',
-    REDIS_URL: process.env.REDIS_URL,
   };
   const missing = Object.entries(cfg)
     .filter(([k, v]) => typeof v === 'string' && v.length === 0)
