@@ -5,94 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>TONоготчи</title>
   <meta name="theme-color" content="#0f1720"/>
-  <style>
-    :root{--bg:#0f1720;--fg:#f5f5f5;--muted:#708499;--acc:#6ab3f3;--card:#232e3c}
-    html,body{background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;margin:0;padding:0;height:100%}
-    .wrap{display:flex;align-items:center;justify-content:center;min-height:100%}
-    .card{background:var(--card);border-radius:12px;padding:16px;max-width:540px;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.35)}
-    .row{display:flex;gap:8px;align-items:center}
-    .row > *{flex:1}
-    input,button,select{background:#17212b;color:var(--fg);border:1px solid #111921;border-radius:8px;padding:10px 12px}
-    button{cursor:pointer}
-    a{color:var(--acc)}
-    .small{font-size:12px;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
-    .pad{height:42px;border-radius:8px;border:1px solid #111921;background:#1a2430;color:#9ecbff}
-    .hit{background:#2a3a4c}
-    .ok{color:#a0f}
-  </style>
+  <link rel="icon" href="/favicon.ico"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{bg:'#0f1720',card:'#1b2633',muted:'#708499',acc:'#6ab3f3'}}}}</script>
 </head>
-<body>
-  <div class="wrap">
-    <div class="card">
-      <h2>TONоготчи</h2>
-      <div class="row">
-        <input id="addr" placeholder="NFT address"/>
-        <button id="load">Загрузить</button>
-      </div>
-      <div id="pet" class="small">—</div>
-      <hr/>
-      <div class="row">
-        <select id="careType">
-          <option value="feed">Покормить</option>
-          <option value="bath">Искупать</option>
-          <option value="sleep">Уложить спать</option>
-          <option value="play">Поиграть</option>
-        </select>
-        <button id="care">Care</button>
-      </div>
-      <div class="small" id="careRes"></div>
-      <hr/>
-      <div class="row">
-        <button id="startRh">Старт ритм-игры</button>
-        <button id="submitRh">Отправить</button>
-      </div>
-      <div class="grid" id="pads"></div>
-      <div class="small" id="rhInfo">—</div>
-      <hr/>
-      <div class="small">API: <a href="/api">/api</a></div>
-    </div>
+<body class="bg-bg text-white min-h-screen">
+  <div class="max-w-screen-md mx-auto p-4">
+    <header class="flex items-center justify-between gap-3">
+      <h1 class="text-xl font-semibold">TONоготчи</h1>
+      <div id="tonconnect" class="flex items-center gap-2"></div>
+    </header>
+
+    <nav class="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <button data-view="pet" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Питомец</button>
+      <button data-view="care" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Уход</button>
+      <button data-view="breed" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Скрещивание</button>
+      <button data-view="games" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Игры</button>
+      <button data-view="clans" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Кланы</button>
+      <button data-view="market" class="tab py-2 rounded-lg bg-card/60 hover:bg-card">Маркет</button>
+    </nav>
+
+    <section class="mt-4 rounded-xl bg-card/40 p-4" id="content"></section>
+
+    <footer class="mt-6 text-sm text-muted">
+      API: <a class="text-acc" href="/api">/api</a>
+    </footer>
   </div>
-  <script>
-    const api = (p, m='GET', b) => fetch('/api'+p,{method:m,headers:{'content-type':'application/json'},body:b&&JSON.stringify(b)}).then(r=>r.json());
-    const $ = sel => document.querySelector(sel);
-    let tgUserId = '';
-    try { tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || ''; } catch {}
-    const addr = $('#addr');
-    const pads = $('#pads');
-    const rhInfo = $('#rhInfo');
-    const careRes = $('#careRes');
-    let sessionId = null; let pattern = null; let hits = [];
 
-    function renderPads(len=16){
-      pads.innerHTML='';
-      for(let i=0;i<len;i++){ const b=document.createElement('button'); b.className='pad'; b.textContent=i+1; b.onclick=()=>{ b.classList.add('hit'); hits.push(performance.now()-window.rhStartAt); }; pads.appendChild(b);} }
-
-    $('#load').onclick = async () => {
-      const a = addr.value.trim(); if(!a) return;
-      const r = await api('/pet/'+encodeURIComponent(a));
-      $('#pet').textContent = r.error? ('Ошибка: '+r.error) : `Возраст: ${r.status.ageDays}д, множитель ${r.status.multiplier.toFixed(2)}, сегодня ${r.status.earnedToday}/${r.status.capLeft+r.status.earnedToday}`;
-    };
-
-    $('#care').onclick = async () => {
-      const a = addr.value.trim(); if(!a) return;
-      const type = $('#careType').value;
-      const r = await api('/pet/'+encodeURIComponent(a)+'/care','POST',{ type });
-      careRes.textContent = r.ok? 'OK' : ('Ошибка: '+(r.error||'fail'));
-    };
-
-    $('#startRh').onclick = async () => {
-      const a = addr.value.trim(); if(!a) return;
-      const r = await api('/games/rhythm/start','POST',{ tgId: tgUserId||'web', petAddr: a });
-      if(r.sessionId){ sessionId = r.sessionId; pattern = r.pattern; rhInfo.textContent=`BPM ${pattern.bpm}, тактов ${pattern.len}`; renderPads(pattern.len); window.rhStartAt = performance.now(); hits=[]; }
-      else rhInfo.textContent='Ошибка старта';
-    };
-
-    $('#submitRh').onclick = async () => {
-      if(!sessionId){ rhInfo.textContent='Нет активной сессии'; return; }
-      const r = await api('/games/rhythm/submit','POST',{ sessionId, hits });
-      rhInfo.textContent = r.pointsAwarded!==undefined ? `+${r.pointsAwarded} очков, множ.: ${r.multiplier.toFixed(2)}, осталось: ${r.capLeft}` : ('Ошибка: '+(r.message||'fail'));
-    };
-  </script>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+  <script src="/app/api.js"></script>
+  <script src="/app/app.js"></script>
 </body>
 </html>
